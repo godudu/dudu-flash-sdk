@@ -18,9 +18,11 @@ package dudu
 		private var connectionName:String;
 		private var connected:Boolean = false;
 		private var js_requests:Array = [];
+		public static var log:Boolean;
 		
-		public function APIConnector(flashvars:Object, local_connection_on:Boolean = true) 
+		public function APIConnector(flashvars:Object, local_connection_on:Boolean = true, debug_log:Boolean = false) 
 		{
+			log = debug_log;
 			dp = new DataProvider(flashvars.api_url, flashvars.api_id, flashvars.sid, flashvars.secret, flashvars.viewer_id);
 			
 			if(local_connection_on){

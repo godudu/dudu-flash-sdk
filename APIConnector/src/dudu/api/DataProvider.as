@@ -1,5 +1,6 @@
 package dudu.api
 {
+	import dudu.APIConnector;
 	import dudu.MD5;
 	import dudu.serialization.json.JSON;
 	import flash.events.Event;
@@ -71,7 +72,7 @@ package dudu.api
 		
 		private function _sendRequest(method:String, params:Object):void
 		{
-			trace('sendRequest: ', req_num);
+			log('sendRequest: ', req_num);
 			
 			var request_params:Object = {method: method};
 				request_params.api_id = _api_id;
@@ -89,7 +90,14 @@ package dudu.api
 			var variables:URLVariables = new URLVariables();
 			for (var item:String in request_params)
 			{
-				variables[item] = request_params[item];
+				if(request_params[item] is Array)
+				{
+					variables[item+'[]'] = request_params[item];
+				}
+				else
+				{
+					variables[item] = request_params[item];
+				}
 			}
 			variables['sig'] = _generate_signature(request_params);
 			variables['sid'] = _api_sid;
@@ -118,11 +126,11 @@ package dudu.api
 			}
 			catch (error:Error)
 			{
-				trace('error');
+				log('error');
 				params.onError(error);
 				return;
 			}
-			trace('sended');
+			log('sended');
 		}
 		
 		
@@ -162,9 +170,9 @@ package dudu.api
 		
 		private function onComplete(e:Event):void
 		{
-			trace('on complete');
+			log('on complete');
 			var loader:URLLoader = URLLoader(e.target);
-			
+			log(loader.data);
 			var params:Object = getParamsByLoader(loader);
 			var data:Object = JSON.decode(loader.data);
 			
@@ -174,7 +182,6 @@ package dudu.api
 			}
 			else if (params.onComplete && data.result)
 			{
-				trace('ae!');
 				params.onComplete(data.result);
 			}
 			
@@ -183,8 +190,6 @@ package dudu.api
 		
 		private function _generate_signature(request_params:Object):String
 		{
-			
-			//11398api_id=262format=JSONmethod=user.balancev=3.0e0eea7195dc63f59c68b15d1ceb1aa8b4f13c188f1532
 			var sort_arr:Array = [];
 			for (var key:String in request_params)
 			{
@@ -202,7 +207,7 @@ package dudu.api
 				sign = _viewer_id.toString() + sign;
 			sign += _api_secret;
 			
-			trace(sign);
+			log('sign:', sign);
 			
 			return MD5.encrypt(sign);
 		}
@@ -213,6 +218,13 @@ package dudu.api
 			loader.removeEventListener(IOErrorEvent.IO_ERROR, onIOError);
 			loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 			loader = null;
+		}
+		
+		private function log(...args):void
+		{
+			if (APIConnector.log) {
+				trace(args.join(" "));
+			}
 		}
 	}
 
