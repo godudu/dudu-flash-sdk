@@ -18,7 +18,7 @@ package dudu.api
 	 */
 	public class DataProvider
 	{
-		private var req_num:uint=0;
+		private var req_num:uint = 0;
 		private var _api_secret:String;
 		private var _api_sid:String;
 		private var _api_url:String;
@@ -56,15 +56,16 @@ package dudu.api
 			return req_num;
 		}
 		
-		public function cancelRequest(request_id:uint):void {
+		public function cancelRequest(request_id:uint):void
+		{
 			for (var i:uint = 0; i < requests.length; i++)
 			{
 				if (requests[i].req_id == request_id)
 				{
 					var loader:URLLoader = requests[i].loader;
-						loader.close();
+					loader.close();
 					var params:Object = requests[i].params;
-						requests.splice(i, 1);
+					requests.splice(i, 1);
 					break;
 				}
 			}
@@ -75,9 +76,9 @@ package dudu.api
 			log('sendRequest: ', req_num);
 			
 			var request_params:Object = {method: method};
-				request_params.api_id = _api_id;
-				request_params.format = "JSON";
-				request_params.v = "3.0";
+			request_params.api_id = _api_id;
+			request_params.format = "JSON";
+			request_params.v = "3.0";
 			
 			if (params.params)
 			{
@@ -90,9 +91,9 @@ package dudu.api
 			var variables:URLVariables = new URLVariables();
 			for (var item:String in request_params)
 			{
-				if(request_params[item] is Array)
+				if (request_params[item] is Array)
 				{
-					variables[item+'[]'] = request_params[item];
+					variables[item + '[]'] = request_params[item];
 				}
 				else
 				{
@@ -103,22 +104,20 @@ package dudu.api
 			variables['sid'] = _api_sid;
 			
 			var request:URLRequest = new URLRequest();
-				request.url = _api_url;
-				request.method = URLRequestMethod.POST;
-				request.data = variables;
+			request.url = _api_url;
+			request.method = URLRequestMethod.POST;
+			request.data = variables;
 			
 			var loader:URLLoader = new URLLoader();
-				loader.dataFormat = URLLoaderDataFormat.TEXT;
+			loader.dataFormat = URLLoaderDataFormat.TEXT;
 			
-			if (params.onError)
-			{
-				loader.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
-				loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
-			}
+			loader.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
+			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
+			loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, onHTTPStatus);
 			
 			loader.addEventListener(Event.COMPLETE, onComplete);
 			
-			requests.push( { 'loader': loader, 'params': params, 'req_id':req_num } );
+			requests.push({'loader': loader, 'params': params, 'req_id': req_num});
 			
 			try
 			{
@@ -133,6 +132,10 @@ package dudu.api
 			log('sended');
 		}
 		
+		private function onHTTPStatus(e:HTTPStatusEvent):void 
+		{
+			log('HTTP STATUS: ', e.status);
+		}
 		
 		/**
 		 * Generates signature
@@ -156,7 +159,11 @@ package dudu.api
 		{
 			var loader:URLLoader = URLLoader(e.target);
 			var params:Object = getParamsByLoader(loader);
+			
+			if (params.onError)
+			{
 				params.onError('Security error');
+			}
 			killURLLoader(loader);
 		}
 		
@@ -164,7 +171,10 @@ package dudu.api
 		{
 			var loader:URLLoader = URLLoader(e.target);
 			var params:Object = getParamsByLoader(loader);
+			if (params.onError)
+			{
 				params.onError('IO error');
+			}
 			killURLLoader(loader);
 		}
 		
@@ -220,9 +230,10 @@ package dudu.api
 			loader = null;
 		}
 		
-		private function log(...args):void
+		private function log(... args):void
 		{
-			if (APIConnector.log) {
+			if (APIConnector.log)
+			{
 				trace(args.join(" "));
 			}
 		}
