@@ -83,6 +83,9 @@ package dudu
 				case 'setPageTitle': 
 					setPageTitle(params.title);
 					break;
+				case 'setUrlHash':
+					setUrlHash(params.hash);
+					break;
 			}
 		}
 		
@@ -175,6 +178,11 @@ package dudu
 		private function setPageTitle(title:String):void
 		{
 			sendindLC.send('js_' + connectionName, 'setPageTitle', title);
+		}
+		
+		private function setUrlHash(hash:String):void
+		{
+			sendindLC.send('js_' + connectionName, 'setUrlHash', hash);
 		}
 	}
 }
