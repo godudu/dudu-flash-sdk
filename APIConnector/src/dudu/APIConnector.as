@@ -86,6 +86,9 @@ package dudu
 				case 'setUrlHash':
 					setUrlHash(params.hash);
 					break;
+				case 'openUrl':
+					openUrl(params.url);
+					break;
 			}
 		}
 		
@@ -183,6 +186,11 @@ package dudu
 		private function setUrlHash(hash:String):void
 		{
 			sendindLC.send('js_' + connectionName, 'setUrlHash', hash);
+		}
+		
+		private function openUrl(url:String):void
+		{
+			sendindLC.send('js_' + connectionName, 'openUrl', url);
 		}
 	}
 }

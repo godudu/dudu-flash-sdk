@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <flex-config xmlns="http://www.adobe.com/2006/flex-config">
-  <output>Z:\Files\-=GIT=-\Dudu\projects\dudu\source\swf\DUDU_API\APIConnector\.\bin\api_connector.swc</output>
+  <output>C:\APIConnector\.\bin\APIConnector.swc</output>
   <use-network>true</use-network>
   <target-player>10.1</target-player>
   <warnings>true</warnings>
@@ -17,7 +17,7 @@
     <use-resource-bundle-metadata>true</use-resource-bundle-metadata>
     <verbose-stacktraces>false</verbose-stacktraces>
     <source-path>
-      <path-element>z:\files\-=git=-\dudu\projects\dudu\source\swf\dudu_api\apiconnector\src</path-element>
+      <path-element>c:\apiconnector\src</path-element>
     </source-path>
   </compiler>
   <include-classes>
