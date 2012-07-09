@@ -168,12 +168,12 @@ package dudu
 			sendindLC.send('js_' + connectionName, 'showPaymentWindow', value);
 		}
 		
-		private function publishToWall(message:String, photo_id:Number):void
+		private function publishToWall(message:String, photo_id:String):void
 		{
 			sendindLC.send('js_' + connectionName, 'publishToWall', message, photo_id);
 		}
 		
-		private function changeAvatar(image_id:Number):void
+		private function changeAvatar(image_id:String):void
 		{
 			sendindLC.send('js_' + connectionName, 'changeAvatar', image_id);
 		}
